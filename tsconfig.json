@@ -15,7 +15,7 @@
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@test/*": ["./../test/*"],
+			"@test/*": ["./../test/*"]
 		},
 		"outDir": "build",
 		"isolatedModules": false,
@@ -47,8 +47,8 @@
 		"allowSyntheticDefaultImports": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": false,
-		"skipLibCheck": true,
+		"skipLibCheck": true
 	},
 	"include": ["src/**/*", "test/**/*", "jest.config.ts", "jest.setup.ts", "rollup.config.js"],
-	"exclude": ["node_modules/**", "build/**", "coverage/**"],
+	"exclude": ["node_modules/**", "build/**", "coverage/**"]
 }

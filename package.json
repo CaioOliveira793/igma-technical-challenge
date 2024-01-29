@@ -29,7 +29,7 @@
 		"test:cov": "jest --coverage",
 		"test:full-cov": "jest --coverage --collectCoverageFrom '<rootDir>/src/**/*'",
 		"check": "run-z check:lint,check:type",
-		"check:lint": "eslint . --ext ts,json",
+		"check:lint": "eslint . --ext ts,js",
 		"check:type": "tsc --noEmit",
 		"clear": "rimraf build coverage",
 		"clear:build": "rimraf build",

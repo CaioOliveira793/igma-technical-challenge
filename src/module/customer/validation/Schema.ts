@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { isBefore } from 'date-fns';
 import { IssueType } from '@/exception/ErrorTypes';
 import { isCPFvalid, unformatCPF } from '@/module/customer/validation/cpf';
-import { QueryLimitSchema, QueryOffsetSchema } from '@/module/shared/Schema';
+import { QueryLimitSchema, QueryOffsetSchema, SearchTermSchema } from '@/module/shared/Schema';
 
 /**
  * Customer name schema
@@ -69,7 +69,7 @@ export const CreateCustomerSchema = z.object({
  * Validate `CustomerQueryParams`.
  */
 export const CustomerQueryParamsSchema = z.object({
-	name: z.string().optional(),
+	name: SearchTermSchema,
 	limit: QueryLimitSchema,
 	offset: QueryOffsetSchema,
 });

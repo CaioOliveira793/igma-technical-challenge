@@ -52,23 +52,11 @@ export class CustomerMemRepository implements CustomerRepository {
 	}
 
 	public async query(params: CustomerQueryParams): Promise<CustomerResource[]> {
-		let skipped = 0;
 		const customers: Array<CustomerResource> = [];
 
 		for (const [id, state] of this.customers.entries()) {
-			// LIMIT {limit}
-			if (params.limit === customers.length) {
-				break;
-			}
-
 			// WHERE customer.name LIKE %{name}%
 			if (params.name && !state.name.includes(params.name)) {
-				continue;
-			}
-
-			// OFFSET {offset}
-			if (params.offset !== skipped) {
-				skipped += 1;
 				continue;
 			}
 
@@ -77,7 +65,9 @@ export class CustomerMemRepository implements CustomerRepository {
 
 		// ORDER BY created DESC
 		customers.sort((a, b) => b.created.getTime() - a.created.getTime());
-		return customers;
+
+		// LIMIT {limit} OFFSET {offset}
+		return customers.slice(params.offset, params.offset + params.limit);
 	}
 
 	private idFromCPF(cpf: string): string | null {

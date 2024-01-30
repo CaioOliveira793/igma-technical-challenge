@@ -77,3 +77,4 @@ export interface OffsetQuery {
 }
 
 export const DEFAULT_QUERY_LIMIT = 30;
+export const MAX_QUERY_LIMIT = 50;

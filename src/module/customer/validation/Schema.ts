@@ -2,19 +2,7 @@ import { z } from 'zod';
 import { isBefore } from 'date-fns';
 import { IssueType } from '@/exception/ErrorTypes';
 import { isCPFvalid, unformatCPF } from '@/module/customer/validation/cpf';
-
-const ULID_LENGTH = 26;
-const ULID_REGEX = /^[\dA-HJKMNP-TV-Z]{26}$/;
-
-/**
- * Ulid schema
- *
- * Validate a {@link https://github.com/ulid/spec Ulid}.
- */
-export const UlidSchema = z
-	.string()
-	.length(ULID_LENGTH, { message: 'ULID length is not 26' })
-	.regex(ULID_REGEX, { message: 'ULID is invalid' });
+import { QueryLimitSchema, QueryOffsetSchema } from '@/module/shared/Schema';
 
 /**
  * Customer name schema
@@ -73,4 +61,15 @@ export const CreateCustomerSchema = z.object({
 	name: CustomerNameSchema,
 	cpf: CPFSchema,
 	birthdate: CustomerBirthdateSchema,
+});
+
+/**
+ * Customer query params schema
+ *
+ * Validate `CustomerQueryParams`.
+ */
+export const CustomerQueryParamsSchema = z.object({
+	name: z.string().optional(),
+	limit: QueryLimitSchema,
+	offset: QueryOffsetSchema,
 });

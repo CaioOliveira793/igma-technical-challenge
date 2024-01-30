@@ -34,10 +34,8 @@ export interface QueryResult<Resource> {
 	 *
 	 * The offset that will return the previous results of this query.
 	 */
-	prev: number | null;
+	prev: number;
 }
-
-// TODO: test makeQueryResult
 
 /**
  * Create a query result from the resource list and the query params used to
@@ -47,12 +45,12 @@ export interface QueryResult<Resource> {
  * @param params offset query params used in the query
  * @returns resource list
  */
-export function makeQueryResult<Resource, Params extends OffsetQuery>(
+export function makeQueryResult<Resource>(
 	list: Array<Resource>,
-	params: Params
+	params: OffsetQuery
 ): QueryResult<Resource> {
-	const count = list.length,
-		limit = params.limit;
+	const count = list.length;
+	const limit = params.limit;
 	const next = count === params.limit ? params.offset + count : null;
 	const prev = Math.max(params.offset - params.limit, 0);
 	return { list, count, limit, offset: params.offset, next, prev };

@@ -121,7 +121,7 @@ describe('CPF', () => {
 	});
 
 	it('not format a CPF with incorrect length', () => {
-		const cpfs = ['0000000000', '123456789', 'xxxxxxxxxxxxxx'];
+		const cpfs = ['0000000000', '123456789', 'xxxxxxxxxxxxxxx'];
 
 		for (const cpf of cpfs) {
 			expect(formatCPF(cpf)).toStrictEqual(null);

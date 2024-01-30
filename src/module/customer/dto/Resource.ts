@@ -1,4 +1,4 @@
-import { Customer } from '@/module/customer/entity/Customer';
+import { Customer, CustomerState } from '@/module/customer/entity/Customer';
 import { OffsetQuery } from '@/module/shared/Resource';
 
 /**
@@ -42,6 +42,23 @@ export function makeCustomerResource(customer: Customer): CustomerResource {
 		cpf: customer.cpf,
 		name: customer.name,
 		birthdate: customer.birthdate,
+	};
+}
+
+/**
+ * Mount a customer resource from a ID and the customer state
+ *
+ * @param id entity ID
+ * @param state customer state
+ * @returns customer resource
+ */
+export function mountCustomerResource(id: string, state: CustomerState): CustomerResource {
+	return {
+		id,
+		cpf: state.cpf,
+		created: state.created,
+		birthdate: state.birthdate,
+		name: state.name,
 	};
 }
 

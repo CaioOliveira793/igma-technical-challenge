@@ -1,5 +1,4 @@
-import { default as z } from 'zod';
-import { InvalidTypeMessage, RequiredValueMessage } from '@/exception/Message';
+import { z } from 'zod';
 
 export type NodeEnv = 'development' | 'test' | 'production';
 
@@ -25,13 +24,7 @@ export interface EnvVariables {
 
 const EnvVariablesSchema = z
 	.object({
-		PORT: z
-			.number({
-				invalid_type_error: InvalidTypeMessage,
-				required_error: RequiredValueMessage,
-				coerce: true,
-			})
-			.int({ message: 'PORT environment must be a integer' }),
+		PORT: z.number({ coerce: true }).int({ message: 'PORT environment must be a integer' }),
 		NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 		DATABASE_URL: z
 			.string()

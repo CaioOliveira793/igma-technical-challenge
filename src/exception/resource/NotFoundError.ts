@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { AppError, HttpErrorObject } from '@/exception/AppError';
 import { ResourceLocation } from '@/exception/ErrorTypes';
 
-export class ResourceNotFound extends AppError {
+export class NotFoundError extends AppError {
 	public readonly error: string = 'NOT_FOUND';
 	public readonly resource: ResourceLocation;
 

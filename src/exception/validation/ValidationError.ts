@@ -1,12 +1,12 @@
 import { HttpStatus } from '@nestjs/common';
 import { AppError, HttpErrorObject } from '@/exception/AppError';
-import { InvalidDataIssue } from '@/exception/ErrorTypes';
+import { ValidationIssue } from '@/exception/ErrorTypes';
 
 export class ValidationError extends AppError {
 	public readonly error: string = 'VALIDATION';
-	public readonly issues: InvalidDataIssue[];
+	public readonly issues: ValidationIssue[];
 
-	constructor(issues: InvalidDataIssue[]) {
+	constructor(issues: ValidationIssue[]) {
 		super('Validation error');
 		this.issues = issues;
 	}

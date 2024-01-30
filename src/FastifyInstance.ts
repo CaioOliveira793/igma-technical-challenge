@@ -3,9 +3,9 @@ import cors from '@fastify/cors';
 import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
 import { isValid as isValidDate, parseISO as parseDateISO8601 } from 'date-fns';
 import { logLevel } from '@/config/ConfigOptions';
-import { RequestValidationError } from '@/exception/validation/RequestValidationError';
+import { RequestError } from '@/exception/validation/RequestError';
 import { RequestSegment } from '@/http/types';
-import { DataIssueType, InvalidDataIssue } from '@/exception/ErrorTypes';
+import { IssueType, ValidationIssue } from '@/exception/ErrorTypes';
 import { removeStackTrace } from '@/util/error';
 
 const BODY_LIMIT = 512 * 1024; // 512 KB
@@ -30,6 +30,8 @@ export function fastifyInstance(): FastifyInstance {
 	return instance;
 }
 
+const JSON_BODY_ERROR_MESSAGE = 'An error occurred parsing the request body as JSON';
+
 function jsonContentTypeParser(
 	request: FastifyRequest,
 	body: string,
@@ -39,12 +41,12 @@ function jsonContentTypeParser(
 		const json = JSON.parse(body, reviver);
 		done(null, json);
 	} catch (err: unknown) {
-		const validationnIssue: InvalidDataIssue = {
-			message: (err as Error).message,
+		const validationIssue: ValidationIssue = {
+			message: (err as Error)?.message ?? JSON_BODY_ERROR_MESSAGE,
 			path: null,
-			type: DataIssueType.InvalidContent,
+			type: IssueType.InvalidContent,
 		};
-		const error = new RequestValidationError(RequestSegment.Body, [validationnIssue]);
+		const error = new RequestError(RequestSegment.Body, [validationIssue]);
 		request.log.info(removeStackTrace(error, true), error.message);
 		done(error, undefined);
 	}

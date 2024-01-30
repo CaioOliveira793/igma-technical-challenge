@@ -2,21 +2,21 @@ import { ZodIssue } from 'zod';
 import { HttpStatus } from '@nestjs/common';
 import { RequestSegment } from '@/http/types';
 import { AppError, HttpErrorObject } from '@/exception/AppError';
-import { InvalidDataIssue, zodIssueToInvalidDataIssue } from '@/exception/ErrorTypes';
+import { ValidationIssue, zodIssueToValidationIssue } from '@/exception/ErrorTypes';
 
-export class RequestValidationError extends AppError {
+export class RequestError extends AppError {
 	public readonly error: string = 'VALIDATION';
 	public readonly segment: RequestSegment;
-	public readonly issues: InvalidDataIssue[];
+	public readonly issues: ValidationIssue[];
 
-	public constructor(segment: RequestSegment, issues: InvalidDataIssue[]) {
-		super('Request validation error');
+	public constructor(segment: RequestSegment, issues: ValidationIssue[]) {
+		super('Request error');
 		this.segment = segment;
 		this.issues = issues;
 	}
 
 	public static fromZodIssue(segment: RequestSegment, issues: ZodIssue[]) {
-		return new RequestValidationError(segment, issues.map(zodIssueToInvalidDataIssue));
+		return new RequestError(segment, issues.map(zodIssueToValidationIssue));
 	}
 
 	public override httpErrorObject(): HttpErrorObject {

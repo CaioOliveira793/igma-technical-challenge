@@ -15,11 +15,20 @@ export interface HttpBaseError {
 	 * @param {Response} response Response which the error will be written
 	 */
 	toHttp(request: Readonly<Request>, response: Response): void;
-
+	/**
+	 * Returns an HTTP error object decorated with the error information.
+	 *
+	 * @returns http error object
+	 */
 	httpErrorObject(): HttpErrorObject;
 }
 
-export class AppError extends Error implements HttpBaseError {
+/**
+ * App error
+ *
+ * Base application error class.
+ */
+export abstract class AppError extends Error implements HttpBaseError {
 	public httpErrorObject(): HttpErrorObject {
 		return {
 			status: HttpStatus.INTERNAL_SERVER_ERROR,

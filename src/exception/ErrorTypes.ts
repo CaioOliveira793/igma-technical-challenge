@@ -1,13 +1,35 @@
 import { ZodIssue } from 'zod';
 
+/**
+ * Resource location
+ *
+ * A description of a reference to a resource.
+ */
 export interface ResourceLocation {
+	/**
+	 * Path
+	 *
+	 * The location from which the resource was referenced.
+	 */
 	path: string | null;
-	key: string;
+	/**
+	 * Resource key
+	 *
+	 * A unique key that can identify a single resource.
+	 */
+	resource_key: string;
+	/**
+	 * Resource type
+	 */
 	resource_type: string;
 }
 
-/// from {ZodIssueCode}
-export const enum DataIssueType {
+/**
+ * Validation Issue type
+ *
+ * The different validation issue types. Taken from {ZodIssueCode}.
+ */
+export const enum IssueType {
 	InvalidContent = 'invalid_content',
 	InvalidType = 'invalid_type',
 	InvalidLiteral = 'invalid_literal',
@@ -27,16 +49,25 @@ export const enum DataIssueType {
 	NotFinite = 'not_finite',
 }
 
-export interface InvalidDataIssue {
-	message: string;
-	path: string | null;
-	type: DataIssueType;
+/**
+ * Validation issue
+ */
+export interface ValidationIssue {
+	readonly type: IssueType;
+	readonly path: string | null;
+	readonly message: string;
 }
 
-export function zodIssueToInvalidDataIssue(issue: ZodIssue): InvalidDataIssue {
+/**
+ * Transform a `ZodIssue` into a `ValidationIssue`.
+ *
+ * @param issue zod issue
+ * @returns a validation issue
+ */
+export function zodIssueToValidationIssue(issue: ZodIssue): ValidationIssue {
 	return {
 		message: issue.message,
 		path: issue.path.join('.'),
-		type: issue.code as DataIssueType,
+		type: issue.code as IssueType,
 	};
 }

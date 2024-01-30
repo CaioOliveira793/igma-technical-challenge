@@ -3,6 +3,11 @@ import { InvalidTypeMessage, RequiredValueMessage } from '@/exception/Message';
 
 export type NodeEnv = 'development' | 'test' | 'production';
 
+/**
+ * Environment variables
+ *
+ * All environment variables available in the process.
+ */
 export interface EnvVariables {
 	/**
 	 * Current NodeJS runtime enviornment

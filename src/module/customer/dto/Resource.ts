@@ -1,4 +1,5 @@
 import { Customer } from '@/module/customer/entity/Customer';
+import { OffsetQuery } from '@/module/shared/Resource';
 
 /**
  * Customer resource
@@ -47,7 +48,7 @@ export function makeCustomerResource(customer: Customer): CustomerResource {
 /**
  * Customer query params.
  */
-export interface CustomerQueryParams {
+export interface CustomerQueryParams extends OffsetQuery {
 	/**
 	 * Name
 	 *

@@ -14,6 +14,14 @@ export function fakeCustomer(state: Partial<CustomerState> = {}, id = ulid()): C
 	return Customer.restore(id, fakeCustomerState(state));
 }
 
+export function fakeCustomerBirthdate(refDate: Date = new Date()): Date {
+	return faker.date.past({ refDate, years: 10 });
+}
+
+export function fakeCustomerName(): string {
+	return faker.person.fullName();
+}
+
 /**
  * Generates a valid customer state based on a partially provided state.
  *
@@ -25,8 +33,8 @@ export function fakeCustomerState(state: Partial<CustomerState> = {}): CustomerS
 	return {
 		created,
 		cpf: state.cpf ?? fakeCPF(),
-		name: state.name ?? faker.person.fullName(),
-		birthdate: state.birthdate ?? faker.date.past({ refDate: created, years: 10 }),
+		name: state.name ?? fakeCustomerName(),
+		birthdate: state.birthdate ?? fakeCustomerBirthdate(created),
 	};
 }
 

@@ -38,6 +38,7 @@ const config: Config = {
 		'/rollup/',
 		'/prisma/',
 		'/build/',
+		'/test/',
 		'\\.mock\\.',
 		'\\.fake\\.',
 	],
@@ -156,7 +157,7 @@ const config: Config = {
 	// testLocationInResults: false,
 
 	// The glob patterns Jest uses to detect test files
-	testMatch: ['**/?(*.)+(test).[tj]s?(x)'],
+	testMatch: ['**/*.test.[tj]s'],
 
 	// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
 	testPathIgnorePatterns: ['/node_modules/', '/rollup/', '/prisma/', '/build/', '/coverage/'],

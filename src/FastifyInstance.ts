@@ -2,7 +2,7 @@ import fastify, { FastifyInstance, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
 import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
 import { isValid as isValidDate, parseISO as parseDateISO8601 } from 'date-fns';
-import { logLevel } from '@/config/ConfigOptions';
+import { fastifyLogger } from '@/config/ConfigOptions';
 import { RequestError } from '@/exception/validation/RequestError';
 import { RequestSegment } from '@/http/types';
 import { IssueType, ValidationIssue } from '@/exception/ErrorTypes';
@@ -14,7 +14,7 @@ const KEEP_ALIVE_TIMEOUT = 90_000; // 1 min 30 seconds
 
 export function fastifyInstance(): FastifyInstance {
 	const instance = fastify({
-		logger: { level: logLevel() },
+		logger: fastifyLogger(),
 		bodyLimit: BODY_LIMIT,
 		connectionTimeout: CONNECTION_TIMEOUT,
 		keepAliveTimeout: KEEP_ALIVE_TIMEOUT,

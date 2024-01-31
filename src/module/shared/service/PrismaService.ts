@@ -21,6 +21,9 @@ function instantiatePrismaClient(env: NodeEnv, datasourceUrl: string): PrismaCli
 		case 'production':
 			return new PrismaClient({ datasourceUrl, log: ['warn', 'error'] });
 
+		case 'test':
+			return new PrismaClient({ datasourceUrl, log: ['error'] });
+
 		default:
 			return new PrismaClient({
 				datasourceUrl,

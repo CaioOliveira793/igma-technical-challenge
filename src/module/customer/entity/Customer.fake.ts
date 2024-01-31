@@ -1,6 +1,6 @@
 import { ulid } from 'ulid';
 import { faker } from '@faker-js/faker';
-import { Customer, CustomerState } from '@/module/customer/entity/Customer';
+import { CreateCustomerData, Customer, CustomerState } from '@/module/customer/entity/Customer';
 import { fakeCPF } from '@/module/customer/validation/cpf.fake';
 
 /**
@@ -15,7 +15,7 @@ export function fakeCustomer(state: Partial<CustomerState> = {}, id = ulid()): C
 }
 
 /**
- * Generates a valid customer state based on a partial provided state.
+ * Generates a valid customer state based on a partially provided state.
  *
  * @param state partial customer state
  * @returns valid customer state
@@ -27,5 +27,21 @@ export function fakeCustomerState(state: Partial<CustomerState> = {}): CustomerS
 		cpf: state.cpf ?? fakeCPF(),
 		name: state.name ?? faker.person.fullName(),
 		birthdate: state.birthdate ?? faker.date.past({ refDate: created, years: 10 }),
+	};
+}
+
+/**
+ * Generates a valid customer creation data based on a partially provided data.
+ *
+ * @param state partial create customer data
+ * @returns valid customer creation data
+ */
+export function fakeCreateCustomerData(
+	state: Partial<CreateCustomerData> = {}
+): CreateCustomerData {
+	return {
+		cpf: state.cpf ?? fakeCPF(),
+		name: state.name ?? faker.person.fullName(),
+		birthdate: state.birthdate ?? faker.date.past({ refDate: new Date(), years: 10 }),
 	};
 }

@@ -10,11 +10,10 @@ import {
 	Query,
 } from '@nestjs/common';
 import { SchemaPipe } from '@/pipe/SchemaPipe';
-import { ConflictError } from '@/exception/resource/ConflictError';
 import { NotFoundError } from '@/exception/resource/NotFoundError';
 import { UlidSchema } from '@/module/shared/Schema';
 import { QueryResult, makeQueryResult } from '@/module/shared/Resource';
-import { CreateCustomerData, Customer } from '@/module/customer/entity/Customer';
+import { CreateCustomerData } from '@/module/customer/entity/Customer';
 import {
 	CPFSchema,
 	CreateCustomerSchema,
@@ -30,10 +29,12 @@ import {
 	CustomerResource,
 	makeCustomerResource,
 } from '@/module/customer/dto/Resource';
+import { CreateCustomerUseCase } from '@/module/customer/usecase/CreateCustomerUseCase';
 
 @Controller()
 export class CustomerController {
 	constructor(
+		private readonly createCustomer: CreateCustomerUseCase,
 		@Inject(CUSTOMER_REPOSITORY_PROVIDER)
 		private readonly customerRepository: CustomerRepository
 	) {}
@@ -49,18 +50,7 @@ export class CustomerController {
 	public async create(
 		@Body(new SchemaPipe(CreateCustomerSchema)) data: CreateCustomerData
 	): Promise<CustomerResource> {
-		const customerFound = await this.customerRepository.findByCPF(data.cpf);
-		if (customerFound) {
-			throw new ConflictError({
-				path: 'cpf',
-				resource_type: CUSTOMER_RESOURCE_NAME,
-				resource_key: 'cpf:' + data.cpf,
-			});
-		}
-
-		const customer = Customer.create(data);
-		await this.customerRepository.insert(customer);
-
+		const customer = await this.createCustomer.execute(data);
 		return makeCustomerResource(customer);
 	}
 

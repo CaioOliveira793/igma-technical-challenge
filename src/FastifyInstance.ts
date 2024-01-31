@@ -47,7 +47,7 @@ function jsonContentTypeParser(
 			type: IssueType.InvalidContent,
 		};
 		const error = new RequestError(RequestSegment.Body, [validationIssue]);
-		request.log.info(removeStackTrace(error, true), error.message);
+		request.log.info(removeStackTrace(error), error.message);
 		done(error, undefined);
 	}
 }

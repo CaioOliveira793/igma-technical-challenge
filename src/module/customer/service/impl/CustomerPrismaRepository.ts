@@ -1,9 +1,12 @@
 import { PrismaClient, Customer as CustomerTuple } from '@prisma/client';
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/module/shared/service/PrismaService';
-import { CustomerRepository } from '@/module/customer/service/CustomerRepository';
-import { CustomerQueryParams, CustomerResource } from '@/module/customer/dto/Resource';
+import { Inject, Injectable, Provider } from '@nestjs/common';
+import { PRISMA_SERVICE_PROVIDER, PrismaService } from '@/module/shared/service/PrismaService';
 import { Customer } from '@/module/customer/entity/Customer';
+import { CustomerQueryParams, CustomerResource } from '@/module/customer/dto/Resource';
+import {
+	CUSTOMER_REPOSITORY_PROVIDER,
+	CustomerRepository,
+} from '@/module/customer/service/CustomerRepository';
 
 function mapTupleToCustomerEntity(tuple: CustomerTuple): Customer {
 	return Customer.restore(tuple.id, {
@@ -17,7 +20,7 @@ function mapTupleToCustomerEntity(tuple: CustomerTuple): Customer {
 @Injectable()
 export class CustomerPrismaRepository implements CustomerRepository {
 	public constructor(
-		@Inject()
+		@Inject(PRISMA_SERVICE_PROVIDER)
 		prismaService: PrismaService
 	) {
 		this.prisma = prismaService.prisma;
@@ -73,3 +76,8 @@ export class CustomerPrismaRepository implements CustomerRepository {
 
 	private readonly prisma: PrismaClient;
 }
+
+export const CustomerPrismaRepositoryProvider: Provider<CustomerRepository> = {
+	provide: CUSTOMER_REPOSITORY_PROVIDER,
+	useClass: CustomerPrismaRepository,
+};

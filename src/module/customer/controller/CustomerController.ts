@@ -30,6 +30,7 @@ import {
 	makeCustomerResource,
 } from '@/module/customer/dto/Resource';
 import { CreateCustomerUseCase } from '@/module/customer/usecase/CreateCustomerUseCase';
+import { ValidationUsage } from '@/exception/validation/ValidationError';
 
 @Controller()
 export class CustomerController {
@@ -48,7 +49,7 @@ export class CustomerController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	public async create(
-		@Body(new SchemaPipe(CreateCustomerSchema)) data: CreateCustomerData
+		@Body(new SchemaPipe(CreateCustomerSchema, ValidationUsage.Entity)) data: CreateCustomerData
 	): Promise<CustomerResource> {
 		const customer = await this.createCustomer.execute(data);
 		return makeCustomerResource(customer);
@@ -63,7 +64,8 @@ export class CustomerController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	public async list(
-		@Query(new SchemaPipe(CustomerQueryParamsSchema)) params: CustomerQueryParams
+		@Query(new SchemaPipe(CustomerQueryParamsSchema))
+		params: CustomerQueryParams
 	): Promise<QueryResult<CustomerResource>> {
 		const list = await this.customerRepository.query(params);
 		return makeQueryResult(list, params);

@@ -1,29 +1,21 @@
-import { Test } from '@nestjs/testing';
-import { AppModule } from '@/module/App';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import { fastifyInstance } from '@/FastifyInstance';
+import { addDays } from 'date-fns';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { HttpErrorObject } from '@/exception/AppError';
 import {
 	fakeCreateCustomerData,
 	fakeCustomerBirthdate,
 	fakeCustomerName,
 } from '@/module/customer/entity/Customer.fake';
-import { databaseSetup } from './script/databaseSetup';
 import { CustomerResource } from '@/module/customer/dto/Resource';
 import { fakeCPF } from '@/module/customer/validation/cpf.fake';
-import { addDays } from 'date-fns';
+import { databaseSetup } from '@test/script/databaseSetup';
+import { makeTestApplication } from './script/makeTestApplication';
 
 describe('POST /customer', () => {
 	let app: NestFastifyApplication;
 
 	beforeAll(async () => {
-		const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
-		app = moduleRef.createNestApplication<NestFastifyApplication>(
-			new FastifyAdapter(fastifyInstance()),
-			{ bodyParser: false }
-		);
-		await app.init();
-		await app.getHttpAdapter().getInstance().ready();
+		app = await makeTestApplication();
 	});
 
 	beforeEach(async () => {

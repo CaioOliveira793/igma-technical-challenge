@@ -38,7 +38,7 @@ A API pode ser consumida pelo seu cliente HTTP favorito (Postman, Insomnia, curl
 
 ## Endpoints
 
-<!-- TODO: add openapi docs -->
+Abra a documentação da API usando `pnpm run docs:open` para visualizar a documentação com o **Swagger (OpenAPI)**. Caso o serviço esteja em execução com suas configurações padrão, será possível usar a API através da interface.
 
 - `POST /customer` Cria cliente com CPF, nome e data de nascimento
 - `GET  /customer/:id` Lê um cliente pelo ID

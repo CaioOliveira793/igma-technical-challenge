@@ -13,4 +13,4 @@ RUN pnpm install --include=prod --include=dev --ignore-scripts
 
 COPY ./ ./
 
-CMD pnpm run start:dev
+CMD pnpm run db:migrate && pnpm run start:dev

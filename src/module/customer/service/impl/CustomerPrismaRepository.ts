@@ -61,7 +61,7 @@ export class CustomerPrismaRepository implements CustomerRepository {
 	public async query(params: CustomerQueryParams): Promise<Array<CustomerResource>> {
 		const tuples = await this.prisma.customer.findMany({
 			where: {
-				name: params.name ? { contains: params.name } : undefined,
+				name: params.name ? { contains: '%' + params.name + '%' } : undefined,
 			},
 			// Since the id is lexicographically sortable and has the creation timestamp
 			// in the most significant part, sorting by the id will produce the same order

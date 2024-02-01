@@ -40,6 +40,32 @@ paths:
           $ref: '#/components/responses/ValidationError'
         '409':
           $ref: '#/components/responses/ConflictError'
+    get:
+      tags:
+        - Customer
+      summary: Query a list of customers
+      operationId: QueryCustomer
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: name
+          in: query
+          description: Name of the customer
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer query response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/QueryResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/components/schemas/Customer'
   /customer/{id}:
     get:
       tags:
@@ -109,6 +135,26 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Customer'
+
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Limit of resources
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 50
+        default: 30
+    Offset:
+      name: offset
+      in: query
+      description: Number of resources to skip
+      required: false
+      schema:
+        type: integer
+        minimum: 0
 
   schemas:
     StatusCode:
@@ -209,6 +255,37 @@ components:
           type: string
         resource:
           $ref: '#/components/schemas/ResourceLocation'
+    QueryResult:
+      type: object
+      required:
+        - list
+        - count
+        - limit
+        - offset
+        - next
+        - prev
+      properties:
+        list:
+          type: array
+          items: {}
+        count:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 0
+          maximum: 50
+          default: 30
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+        next:
+          type: integer
+          minimum: 0
+        prev:
+          type: integer
+          minimum: 0
     Customer:
       type: object
       required:

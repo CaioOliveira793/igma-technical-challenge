@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: Igma challenge API
+  description: Solution to the Igma technical challenge
+  contact:
+    name: Caio Oliveira
+    url: https://github.com/CaioOliveira793/igma-technical-challenge
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+  - url: http://localhost:{port}
+    description: The development server API
+    variables:
+      port:
+        enum:
+          - '3333'
+          - '8080'
+          - '80'
+        default: '3333'
+paths:
+  /customer:
+    post:
+      tags:
+        - Customer
+      summary: Create customer
+      description: Create a new customer
+      operationId: PostCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerData'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CustomerResource'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+  /customer/{id}:
+    get:
+      tags:
+        - Customer
+      summary: Get a customer by the ID
+      operationId: GetCustomer
+      parameters:
+        - name: id
+          in: path
+          description: ID of the customer
+          required: true
+          schema:
+            type: string
+            format: ulid
+      responses:
+        '200':
+          $ref: '#/components/responses/CustomerResource'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /customer/by_cpf/{cpf}:
+    get:
+      tags:
+        - Customer
+      summary: Get a customer by the CPF
+      operationId: GetCustomerByCPF
+      parameters:
+        - name: cpf
+          in: path
+          description: CPF of the customer
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/CustomerResource'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+
+components:
+  responses:
+    ValidationError:
+      description: Validation error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    NotFoundError:
+      description: Not found error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+    ConflictError:
+      description: Conflict error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConflictError'
+    CustomerResource:
+      description: Customer resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Customer'
+
+  schemas:
+    StatusCode:
+      type: integer
+      format: int16
+      minimum: 100
+      maximum: 599
+    ValidationIssue:
+      description: Issue encountered in the validation routine
+      type: object
+      required:
+        - type
+        - message
+      properties:
+        type:
+          type: string
+          enum:
+            - 'invalid_content'
+            - 'invalid_type'
+            - 'invalid_literal'
+            - 'custom'
+            - 'invalid_union'
+            - 'invalid_union_discriminator'
+            - 'invalid_enum_value'
+            - 'unrecognized_keys'
+            - 'invalid_arguments'
+            - 'invalid_return_type'
+            - 'invalid_date'
+            - 'invalid_string'
+            - 'too_small'
+            - 'too_big'
+            - 'invalid_intersection_types'
+            - 'not_multiple_of'
+            - 'not_finite'
+        path:
+          type: string
+        message:
+          type: string
+    ValidationError:
+      type: object
+      required:
+        - status
+        - error
+        - message
+        - issues
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        error:
+          type: string
+        message:
+          type: string
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationIssue'
+    ResourceLocation:
+      type: object
+      required:
+        - resource_key
+        - resource_type
+      properties:
+        resource_key:
+          type: string
+        resource_type:
+          type: string
+        path:
+          type: string
+    NotFoundError:
+      type: object
+      required:
+        - status
+        - error
+        - message
+        - resource
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        error:
+          type: string
+        message:
+          type: string
+        resource:
+          $ref: '#/components/schemas/ResourceLocation'
+    ConflictError:
+      type: object
+      required:
+        - status
+        - error
+        - message
+        - resource
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        error:
+          type: string
+        message:
+          type: string
+        resource:
+          $ref: '#/components/schemas/ResourceLocation'
+    Customer:
+      type: object
+      required:
+        - id
+        - created
+        - cpf
+        - name
+        - birthdate
+      properties:
+        id:
+          type: string
+          format: ulid
+        created:
+          type: string
+          format: date-time
+        cpf:
+          type: string
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date-time
+    CreateCustomerData:
+      type: object
+      required:
+        - cpf
+        - name
+        - birthdate
+      properties:
+        cpf:
+          type: string
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date-time
